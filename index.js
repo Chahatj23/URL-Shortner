@@ -1,17 +1,24 @@
 const express = require("express");
 const { connectToMongoDB }= require('./connect')
-const urlRoute=require('./routes/url');
+require('dotenv').config()
 const URL = require('./models/url')
-const staticRoute =require('./routes/staticRouter')
+
+const urlRoute=require('./routes/url');
+const staticRoute =require('./routes/staticRouter');
+const userRoute=require('./routes/user');
 const path = require("path");
+const cookieParser = require("cookie-parser");
 const app =express();
-const PORT = 8001;
+const PORT = process.env.PORT;
+const {restrictToLoggedInUserOnly,checkAuth} =require('./middleware/auth')
+
 connectToMongoDB(
-    'mongodb://localhost:27017/shorturl'
+    process.env.DB_URL
 )
 app.set("view engine","ejs");
 app.set("views",path.resolve("./views"));
 app.use(express.json());
+app.use(cookieParser())
 app.use(express.urlencoded({extended:false}))
 // app.get('/test',async (req,res)=>{
 //     const allUrls = await URL.find({});
@@ -19,8 +26,9 @@ app.use(express.urlencoded({extended:false}))
 //         urls:allUrls,
 //     });
 // })
-app.use('/url',urlRoute);
-app.use('/',staticRoute);
+app.use('/url',restrictToLoggedInUserOnly,urlRoute);
+app.use('/',checkAuth,staticRoute);
+app.use('/user',userRoute);
 app.get('/url/:shortId',async(req,res)=>{
     const shortId =req.params.shortId;
     const entry =await URL.findOneAndUpdate({
