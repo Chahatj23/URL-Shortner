@@ -4,42 +4,289 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home Page</title>
+    <style>
+        /* General reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body styling */
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #FFDEE9, #B5FFFC);
+            overflow-x: hidden;
+            color: black;
+            position: relative;
+        }
+
+        /* Particle background */
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            top: 0;
+            left: 0;
+            
+        }
+
+        h1 {
+            font-size: 3rem;
+            text-align: center;
+            margin-bottom: 20px;
+            animation: slideDown 1s ease-in-out;
+        }
+
+        /* Form container */
+        .form-container {
+            text-align: center;
+           
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        label {
+            font-size: 1.2rem;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+            transition: box-shadow 0.3s ease;
+        }
+
+        input[type="text"]:focus {
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+            outline: none;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #48f;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #f06;
+        }
+
+        /* Table Styling */
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        th {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        td {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        tr:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        .home{
+            display: flex;
+            flex-direction: column;
+            margin-top: 40px;
+        }
+    </style>
 </head>
 <body>
-    <h1>URL Shortner</h1>
-    <% if (locals.id) { %>
-     <p> URL Generated: http://localhost:8001/url/<%= id %></p>
-    <% } %>
+    <div id="particles-js"></div>
+    <div class="home">
+    <div class="form-container">
+        <h1>URL Shortener</h1>
+
+        <% if (locals.id) { %>
+        <p > URL Generated Successfully: <a href="/url/<%= id %>">http://localhost:8001/url/<%= id %></a></p>
+        <a href="/" style="text-decoration: none;">Back to Home</a>
+        <%  } else { %>
+            <form action="/url" method="POST">
+                <label for="url">Enter Your Original URL</label>
+                <input type="text" id="url" name="url" placeholder="https://example.com" required />
+                <button type="submit">Generate</button>
+            </form>
+        
+        <%   } %>
+                
+    </div>
     <div>
-        <form action="/url" method="POST">
-            <label> Enter Your Original URL</label>
-            <input type="text"
-            name='url'
-            placeholder="https://example.com"/>
-            <button type="submit">Generate</button>
-        </form>
-        <div>
-            <% if (locals.urls) { %>
-             <table>
-                <thead>
-                <th>Sr.No</th>
-                <th>ShortID</th>
-                <th>Redirect</th>
-                <th>Clicks</th>
+        <!-- <% if (locals.urls) { %> -->
+        <table>
+            <thead>
+                <tr>
+                    <th>Sr.No</th>
+                    <th>Short ID</th>
+                    <th>Redirect URL</th>
+                    <th>Clicks</th>
+                    <th>Analytics</th>
+                </tr>
             </thead>
             <tbody>
-                <% urls.forEach((url,index) => { %>
-                    <tr>
-                 <td><%= index+1 %></td>
-                 <td><%= url.shortId %></td>
-                 <td><%= url.redirectURL %></td>
-                 <td><%= url.visitHistory.length %></td>
-                </tr>
-                <% }) %>
+                    <% urls.forEach((url, index) => { %>
+                        <tr>
+                            <td><%= index + 1 %></td>
+                            <td><%= url.shortId %></td>
+                            <td><%= url.redirectURL %></td>
+                            <td><%= url.visitHistory.length %></td>
+                            <td>
+                                <!-- Get Analytics Button -->
+                                <form action="/url/analytics/<%= url.shortId %>" method="GET">
+                                    <button class="analytics-btn" type="submit">Get Analytics</button>
+                                </form>
+                            </td>
+                        </tr>
+                        <% }) %>
+               
             </tbody>
-             </table>
-            <% } %>
-        </div>
+        </table>
+        <!-- <% } %> -->
     </div>
+</div>
+    <!-- Particle JS Library -->
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script>
+        particlesJS('particles-js', {
+            "particles": {
+                "number": {
+                    "value": 100,
+                    "density": {
+                        "enable": true,
+                        "value_area": 800
+                    }
+                },
+                "color": {
+                    "value": "#ffffff"
+                },
+                "shape": {
+                    "type": "circle",
+                    "stroke": {
+                        "width": 0,
+                        "color": "#000000"
+                    }
+                },
+                "opacity": {
+                    "value": 0.5,
+                    "random": false,
+                    "anim": {
+                        "enable": false,
+                        "speed": 1,
+                        "opacity_min": 0.1,
+                        "sync": false
+                    }
+                },
+                "size": {
+                    "value": 5,
+                    "random": true,
+                    "anim": {
+                        "enable": false,
+                        "speed": 40,
+                        "size_min": 0.1,
+                        "sync": false
+                    }
+                },
+                "line_linked": {
+                    "enable": true,
+                    "distance": 150,
+                    "color": "#ffffff",
+                    "opacity": 0.4,
+                    "width": 1
+                },
+                "move": {
+                    "enable": true,
+                    "speed": 6,
+                    "direction": "none",
+                    "random": false,
+                    "straight": false,
+                    "out_mode": "out",
+                    "bounce": false,
+                    "attract": {
+                        "enable": false,
+                        "rotateX": 600,
+                        "rotateY": 1200
+                    }
+                }
+            },
+            "interactivity": {
+                "detect_on": "canvas",
+                "events": {
+                    "onhover": {
+                        "enable": true,
+                        "mode": "repulse"
+                    },
+                    "onclick": {
+                        "enable": true,
+                        "mode": "push"
+                    },
+                    "resize": true
+                },
+                "modes": {
+                    "grab": {
+                        "distance": 400,
+                        "line_linked": {
+                            "opacity": 1
+                        }
+                    },
+                    "bubble": {
+                        "distance": 400,
+                        "size": 40,
+                        "duration": 2,
+                        "opacity": 8,
+                        "speed": 3
+                    },
+                    "repulse": {
+                        "distance": 200,
+                        "duration": 0.4
+                    },
+                    "push": {
+                        "particles_nb": 4
+                    },
+                    "remove": {
+                        "particles_nb": 2
+                    }
+                }
+            },
+            "retina_detect": true
+        });
+    </script>
 </body>
 </html>
