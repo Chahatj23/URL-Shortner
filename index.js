@@ -27,8 +27,12 @@ app.use(express.urlencoded({extended:false}))
 //     });
 // })
 app.use('/url',restrictToLoggedInUserOnly,urlRoute);
-app.use('/',checkAuth,staticRoute);
+// app.use('/',checkAuth,staticRoute);
+app.use('/',staticRoute);
 app.use('/user',userRoute);
+app.get("/",(req,res)=>{
+     return res.send("Hello")
+})
 app.get('/url/:shortId',async(req,res)=>{
     const shortId =req.params.shortId;
     const entry =await URL.findOneAndUpdate({
