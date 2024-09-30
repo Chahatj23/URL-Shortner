@@ -27,8 +27,7 @@ app.use(express.urlencoded({extended:false}))
 //     });
 // })
 app.use('/url',restrictToLoggedInUserOnly,urlRoute);
-// app.use('/',checkAuth,staticRoute);
-app.use('/',staticRoute);
+app.use('/',checkAuth,staticRoute);
 app.use('/user',userRoute);
 app.get("/",(req,res)=>{
      return res.send("Hello")
