@@ -138,8 +138,12 @@
 
         <% if (locals.id) { %>
         <p > URL Generated Successfully: <a href="/url/<%= id %>">https://url-shortner-c7ck.onrender.com/<%= id %></a></p>
-        <a href="/" style="text-decoration: none;">Back to Home</a>
-        <%  } else { %>
+        <a href="/" style="text-decoration: none; margin-top: 45px;"><button style="margin: 20px;">Back to Home</button></a>
+        <% } else if (locals.error) { %>
+            <p style="color: red; margin-top: 20px; margin-bottom: 20px;"> <%= error %> </p>
+            <a href="/" style="text-decoration: none;"><button>Back to Home</button></a>
+            <% }  else { %>
+
             <form action="/url" method="POST">
                 <label for="url">Enter Your Original URL</label>
                 <input type="text" id="url" name="url" placeholder="https://example.com" required />
@@ -147,6 +151,7 @@
             </form>
         
         <%   } %>
+                <!-- Show an if got error in json format from response -->
                 
     </div>
     <div>
