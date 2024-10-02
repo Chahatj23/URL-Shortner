@@ -29,7 +29,23 @@ if(!body.url) return res.status(400).json({error:'URL is required'});
 async function handleGetAnalytics(req,res){
     const shortId = req.params.shortId;
     const result = await URL.findOne({shortId:shortId});
-    return res.json({totalClicks:result.visitHistory.length,analytics:result.visitHistory})
+    try{
+        // Prepare the analytics data
+        const analyticsData = {
+            totalClicks: result.visitHistory.length,
+            analytics: result.visitHistory // Assuming visitHistory stores click timestamps
+        };
+
+        // Render the analytics page and pass the data to the EJS template
+       return res.render('analytics', { 
+            totalClicks: analyticsData.totalClicks,
+            analytics: analyticsData.analytics 
+        });
+    } catch (err) {
+        console.error('Error fetching analytics:', err);
+         return res.status(500).send('Server Error');
+    }
+  
 }
 module.exports={
     handleGenerateNewShortUrl,

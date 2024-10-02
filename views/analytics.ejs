@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home Page</title>
+    <title>Analytics</title>
     <style>
         /* General reset */
         * {
@@ -17,11 +16,13 @@
         body {
             font-family: 'Arial', sans-serif;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            background: linear-gradient(135deg, #FFDEE9, #B5FFFC);
-            overflow-x: hidden;
+            height: 100vh;
             color: black;
+            background: linear-gradient(135deg, #FFDEE9, #B5FFFC);
+            overflow: hidden;
             position: relative;
         }
 
@@ -39,52 +40,29 @@
             font-size: 3rem;
             text-align: center;
             margin-bottom: 20px;
-            animation: slideDown 1s ease-in-out;
+            animation: fadeIn 1s ease-in-out;
         }
 
-        /* Form container */
-        .form-container {
-            text-align: center;
+        /* Analytics Container */
+        .analytics-container {
             background-color: rgba(255, 255, 255, 0.2);
-            padding: 40px;
+            padding: 30px;
             border-radius: 15px;
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
             backdrop-filter: blur(10px);
+            text-align: center;
+        }
+
+        .analytics-container:hover {
+            transform: scale(1.05);
             transition: transform 0.3s ease-in-out;
         }
 
-        label {
-            font-size: 1.2rem;
-        }
-
-        input[type="text"] {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border: none;
-            border-radius: 5px;
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-            transition: box-shadow 0.3s ease;
-        }
-
-        input[type="text"]:focus {
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
-            outline: none;
-        }
-
-        button {
-            padding: 10px 20px;
-            background-color: #48f;
-            border: none;
-            border-radius: 5px;
-            color: white;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        button:hover {
-            background-color: #f06;
+        /* Total Clicks */
+        .total-clicks {
+           
+            font-size: 2rem;
+            margin-bottom: 30px;
         }
 
         /* Table Styling */
@@ -94,10 +72,10 @@
             border-collapse: collapse;
         }
 
-        th,
-        td {
+        th, td {
             padding: 10px;
             text-align: center;
+         
             border-bottom: 1px solid rgba(255, 255, 255, 0.2);
         }
 
@@ -113,121 +91,66 @@
             background-color: rgba(255, 255, 255, 0.2);
         }
 
-        .button-container {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-        }
-        .btn-small {
-            padding: 5px 10px;
+        /* Back button */
+        .back-btn {
+            padding: 10px 20px;
             background-color: #48f;
             border: none;
-            border-radius: 3px;
-            color: white;
-            font-size: 12px;
+            border-radius: 5px;
+          
+            font-size: 16px;
             cursor: pointer;
+            margin-top: 20px;
             transition: background-color 0.3s ease;
         }
 
-        .btn-small:hover {
+        .back-btn:hover {
             background-color: #f06;
         }
-        @keyframes slideDown {
+
+        @keyframes fadeIn {
             from {
-                transform: translateY(-50px);
                 opacity: 0;
             }
-
             to {
-                transform: translateY(0);
                 opacity: 1;
             }
         }
-
-        .home {
-            display: flex;
-            flex-direction: column;
-            margin-top: 40px;
-        }
     </style>
 </head>
-
 <body>
     <div id="particles-js"></div>
-    <div class="home">
-        <div class="form-container">
-            <h1>URL Shortener</h1>
 
-            <% if (locals.id) { %>
-                <p> URL Generated Successfully: <a href="/url/<%= id %>">https://url-shortner-c7ck.onrender.com/<%= id
-                            %></a></p>
-                <a href="/" style="text-decoration: none; margin-top: 45px;"><button style="margin: 20px;">Back to
-                        Home</button></a>
-                <% } else if (locals.error) { %>
-                    <p style="color: red; margin-top: 20px; margin-bottom: 20px;">
-                        <%= error %>
-                    </p>
-                    <a href="/" style="text-decoration: none;"><button>Back to Home</button></a>
-                    <% } else { %>
+    <div class="analytics-container">
+        <h1>URL Analytics</h1>
 
-                        <form action="/url" method="POST">
-                            <label for="url">Enter Your Original URL</label>
-                            <input type="text" id="url" name="url" placeholder="https://example.com" required />
-                            <button type="submit">Generate</button>
-                        </form>
+        <!-- Total Clicks -->
+        <p class="total-clicks">Total Clicks: <%= totalClicks %></p>
 
-                        <% } %>
-                            <!-- Show an if got error in json format from response -->
+        <!-- Table of Analytics -->
+        <table>
+            <thead>
+                <tr>
+                    <th>Sr. No</th>
+                    <th>Timestamp</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% analytics.forEach((data, index) => { %>
+                <tr>
+                    <td><%= index + 1 %></td>
+                    <td><%= new Date(data.timestamp).toLocaleString() %></td>
+                </tr>
+                <% }) %>
+            </tbody>
+        </table>
 
-        </div>
-        <div>
-            <!-- <% if (locals.urls) { %> -->
-            <table>
-                <thead>
-                    <tr>
-                        <th>Sr.No</th>
-                        <th>Short ID</th>
-                        <th>Redirect URL</th>
-                        <th>Clicks</th>
-                        <th>Analytics</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% urls.forEach((url, index)=> { %>
-                        <tr>
-                            <td>
-                                <%= index + 1 %>
-                            </td>
-                            <td>
-                                <%= url.shortId %>
-                            </td>
-                            <td>
-                                <%= url.redirectURL %>
-                            </td>
-                            <td>
-                                <%= url.visitHistory.length %>
-                            </td>
-                            <td>
-                                <!-- Visit Site button -->
-                                <a href="<%= url.redirectURL %>" target="_blank">
-                                    <button class="btn-small">Visit Site</button>
-                                </a>
-
-                                <!-- Get Analytics button -->
-                                <a href="/analytics/<%= url.shortId %>">
-                                    <button class="btn-small">Get Analytics</button>
-                                </a>
-                            </div>
-                            </td>
-
-                        </tr>
-                        <% }) %>
-
-                </tbody>
-            </table>
-            <!-- <% } %> -->
-        </div>
+        <!-- Back button -->
+        <form action="/">
+            <button class="back-btn" type="submit">Back to Home</button>
+        </form>
     </div>
+
     <!-- Particle JS Library -->
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
     <script>
@@ -335,5 +258,4 @@
         });
     </script>
 </body>
-
 </html>
