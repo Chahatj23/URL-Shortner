@@ -24,7 +24,52 @@
             color: black;
             position: relative;
         }
+           /* Profile dropdown */
+           .profile-container {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
 
+        .profile {
+            position: relative;
+            display: inline-block;
+        }
+
+        .profile img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            background-color: white;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .dropdown-content a, .dropdown-content form {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            text-align: left;
+        }
+
+        .dropdown-content a:hover, .dropdown-content form:hover {
+            background-color: #ddd;
+        }
+
+        .profile:hover .dropdown-content {
+            display: block;
+        }
         /* Particle background */
         #particles-js {
             position: absolute;
@@ -155,6 +200,18 @@
 <body>
     <div id="particles-js"></div>
     <div class="home">
+        <div class="profile-container">
+            <div class="profile">
+                <img src="/default.png" alt="Profile Avatar">
+                <div class="dropdown-content">
+                    <a href="/">Profile</a>
+                    <!-- Form to handle logout functionality -->
+                    <form action="/user/logout" method="get" style="border: none; padding: 0;">
+                        <button type="submit" style="border: none;color: black;  background: none; cursor: pointer; font-size: 16px; padding: 12px 16px;">Logout</button>
+                    </form>
+                </div>
+            </div>
+        </div>
         <div class="form-container">
             <h1>URL Shortener</h1>
 

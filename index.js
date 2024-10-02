@@ -12,6 +12,7 @@ const app =express();
 const PORT = process.env.PORT;
 const {restrictToLoggedInUserOnly,checkAuth} =require('./middleware/auth')
 
+app.use(express.static('public'));
 connectToMongoDB(
     process.env.DB_URL
 )
@@ -26,6 +27,7 @@ app.use(express.urlencoded({extended:false}))
 //         urls:allUrls,
 //     });
 // })
+
 
 app.use('/url',restrictToLoggedInUserOnly,urlRoute);
 app.use('/',checkAuth,staticRoute);
