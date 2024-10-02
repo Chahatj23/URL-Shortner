@@ -205,10 +205,8 @@
                 <img src="/default.png" alt="Profile Avatar">
                 <div class="dropdown-content">
                     <a href="/">Profile</a>
-                    <!-- Form to handle logout functionality -->
-                    <form action="/user/logout" method="get" style="border: none; padding: 0;">
-                        <button type="submit" style="border: none;color: black;  background: none; cursor: pointer; font-size: 16px; padding: 12px 16px;">Logout</button>
-                    </form>
+                    
+                        <a href="/user/logout" style="border: none;color: black;  background: none; cursor: pointer; font-size: 16px; padding: 12px 16px;">Logout</a>
                 </div>
             </div>
         </div>
@@ -266,12 +264,12 @@
                             </td>
                             <td>
                                 <!-- Visit Site button -->
-                                <a href="<%= url.redirectURL %>" target="_blank">
+                                <a href="/<%= url.shortId %>" target="_blank">
                                     <button class="btn-small">Visit Site</button>
                                 </a>
 
                                 <!-- Get Analytics button -->
-                                <a href="/analytics/<%= url.shortId %>">
+                                <a href="/url/analytics/<%= url.shortId %>">
                                     <button class="btn-small">Get Analytics</button>
                                 </a>
                             </div>
