@@ -1,4 +1,6 @@
 const express = require("express");
+const cors=require('cors')
+
 const { connectToMongoDB }= require('./connect')
 require('dotenv').config()
 const URL = require('./models/url')
@@ -11,7 +13,7 @@ const cookieParser = require("cookie-parser");
 const app =express();
 const PORT = process.env.PORT;
 const {restrictToLoggedInUserOnly,checkAuth} =require('./middleware/auth')
-
+app.use(cors());
 app.use(express.static('public'));
 connectToMongoDB(
     process.env.DB_URL
