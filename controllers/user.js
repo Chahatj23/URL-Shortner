@@ -1,8 +1,4 @@
 const User =require('../models/user')
-const { v4: uuidv4 } = require('uuid');
-// We are using uuid library for generating session IDs 
-// uuidv4(); // ⇨ '1b9d6bcd-bbfd-4b2d-9b5d-ab8dfbbd4bed' 
-
 const {setUser } =require('../service/auth')
 async function handleUserSignup(req,res) {
     const {name ,email,password}= req.body;
@@ -11,8 +7,7 @@ async function handleUserSignup(req,res) {
         email,
         password,
     });
-    return res.redirect('/'
-    ); 
+    return res.redirect('/'); 
 } 
 async function handleUserLogin(req,res) {
     const {email,password}=req.body;
@@ -24,7 +19,6 @@ async function handleUserLogin(req,res) {
     }
     const token =setUser(user); 
     res.cookie('uid',token);
-    // return res.json({token})
     return res.redirect('/');
 }
 module.exports ={
